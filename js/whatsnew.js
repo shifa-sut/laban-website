@@ -32,7 +32,7 @@
   }).join('');
   var roll = P.map(function (p) { return '<span>' + esc(p.name) + '</span>'; }).join('');
   document.getElementById('newPill').innerHTML = roll;
-  document.getElementById('newGiant').innerHTML = roll;
+  document.getElementById('newGiant').innerHTML = P.map(function (p) { return '<span><i>' + esc(p.name) + '</i></span>'; }).join('');
   document.getElementById('newThumbs').innerHTML = P.map(function (p, i) {
     return '<button type="button" class="new__thumb" data-i="' + i + '" aria-label="Show ' + esc(p.name) + '" aria-pressed="' + (i === 0) + '"><img src="' + IMG + 'cutouts/' + p.cut + '" alt=""></button>';
   }).join('') + '<span class="new__count" id="newCount">01 / ' + String(N).padStart(2, '0') + '</span>';
@@ -66,7 +66,25 @@
     mobile = innerWidth < 900;
     if (mobile) { var v = copy.getBoundingClientRect().bottom - stage.getBoundingClientRect().top + 14; stage.style.setProperty('--vtop', Math.round(v) + 'px'); }
     else stage.style.removeProperty('--vtop');
+    fitGiant();
   }
+  // the big outlined name runs up the coloured panel: make it exactly as long as the panel
+  // and shrink any name that would not fit, so every product name is always shown in full
+  function fitGiant() {
+    var panel = sec.querySelector('.new__panel'), box = giant.parentElement;
+    var L = panel.clientHeight; if (!L) return;
+    box.style.setProperty('--gl', L + 'px');
+    [].forEach.call(giant.children, function (sp) {
+      sp.style.fontSize = '';
+      var cs = getComputedStyle(sp), base = parseFloat(cs.fontSize), pad = parseFloat(cs.paddingLeft) || 0;
+      var w = sp.firstChild.offsetWidth, avail = L - pad - Math.max(16, L * .05);
+      var size = w > avail ? base * avail / w : base;
+      if (w > avail) sp.style.fontSize = size.toFixed(1) + 'px';
+      // a thin outline only reads well at large sizes; smaller names switch to soft solid letters
+      sp.classList.toggle('is-solid', size < 90);
+    });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitGiant(); });
   function render(p) {
     var i0 = Math.floor(p), i1 = Math.min(i0 + 1, N - 1), f = p - i0, a = COL[i0], b = COL[i1];
     KEYS.forEach(function (k) { sec.style.setProperty('--nw-' + k, mix(a[k], b[k], f)); });
