@@ -146,11 +146,11 @@ p{margin:0}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .entrance{position:relative;background:#0B1520}
 .entrance__track{height:400vh;height:400svh}
-.entrance__sticky{position:sticky;top:0;width:100%;height:100vh;height:100svh;overflow:hidden;color:#fff}
+.entrance__sticky{position:sticky;top:0;width:100%;height:100vh;height:100svh;height:100dvh;overflow:hidden;color:#fff}
 /* The video fills the whole screen from the first frame (100% wide x 100svh, with a 100vh fallback).
    object-fit:cover keeps the video's own proportions, so it is never stretched; the shop stays centred
    and only the overflow at the edges is trimmed. */
-.entrance__frame{position:absolute;top:0;left:0;width:100%;height:100vh;height:100svh;margin:0;padding:0}
+.entrance__frame{position:absolute;top:0;left:0;width:100%;height:100%;margin:0;padding:0}
 .entrance__poster,.entrance__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;background:transparent}
 .entrance__poster img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 .entrance__shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,34,56,.55) 0%,rgba(11,34,56,.1) 32%,rgba(11,34,56,.25) 60%,rgba(11,34,56,.82) 100%)}
@@ -449,7 +449,7 @@ p{margin:0}
 /* desktop: pinned, scroll-scrubbed horizontal movement */
 @media (min-width:900px) and (min-height:600px){
   .gallery.is-pinned .gallery__track{padding-block:0}
-  .gallery.is-pinned .gallery__sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+  .gallery.is-pinned .gallery__sticky{position:sticky;top:0;height:100vh;height:100svh;height:100dvh;overflow:hidden}
   .gallery.is-pinned .gallery__rail{overflow:visible;scroll-snap-type:none;width:max-content;padding-left:max(var(--gutter),calc((100vw - var(--wrap))/2));padding-right:var(--gutter);will-change:transform}
   .g-card{flex-basis:auto;width:min(28vw,360px);max-width:none}
   .gallery.is-pinned .g-card{width:calc((100svh - 300px) * .8);max-width:380px;min-width:240px}
@@ -462,8 +462,11 @@ p{margin:0}
 .new{--nw-bg:#EEF6FC;--nw-panel:#2F98DB;--nw-ring:#BFDDF2;--nw-accent:#0F6CB3;--nw-pill:rgba(255,255,255,.88);--nw-pillText:#0F5E9C;--nw-stroke:rgba(255,255,255,.6);
   position:relative;background:var(--nw-bg)}
 .new__track{position:relative;height:340vh;height:340svh}
-.new__stage{--sh:100vh;--px:68%;--py:56%;position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--nw-bg)}
+.new__stage{--sh:100vh;--px:68%;--py:56%;position:sticky;top:0;height:100vh;height:100svh;height:100dvh;overflow:hidden;background:var(--nw-bg)}
 @supports (height:100svh){.new__stage{--sh:100svh}}
+@supports (height:100dvh){.new__stage{--sh:100dvh}}
+/* pinned screens use the dynamic viewport height (100dvh): when the phone's address bar slides away
+   while scrolling, the pinned screen grows with it, so no strip of the next section shows underneath */
 .new__panel{position:absolute;top:0;bottom:0;left:58%;right:0;background:var(--nw-panel);border-radius:56px 0 0 56px;overflow:hidden}
 .new__ring{position:absolute;left:var(--px);top:var(--py);width:min(104vh,66vw);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);
   background:radial-gradient(circle,transparent 0 47%,var(--nw-ring) 47.4% 47.8%,transparent 48.2% 61%,var(--nw-ring) 61.3% 61.7%,transparent 62%),var(--nw-ring);
@@ -770,7 +773,7 @@ p{margin:0}
   .showcase .sal__spin,.showcase .sal__shadow{animation:none !important}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
   .entrance__track{height:auto}
-  .entrance__sticky{position:relative;height:100vh;height:100svh}
+  .entrance__sticky{position:relative;height:100vh;height:100svh;height:100dvh}
   .entrance__bar{display:none}
   .entrance__inside{display:none}
   .js [data-reveal],.js [data-reveal="zoom"],.js .entrance__copy>*{opacity:1;transform:none;clip-path:none}
