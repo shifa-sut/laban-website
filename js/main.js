@@ -46,23 +46,11 @@
 
   /* ---------------- reveal on view ---------------- */
   var revIO = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); revIO.unobserve(en.target); } }); }, { rootMargin: '0px 0px -8% 0px', threshold: .01 });
-  function motionReveal(el) {
-    var d = parseFloat(el.style.getPropertyValue('--d')) || 0;
-    try {
-      if (el.getAttribute('data-reveal') === 'zoom') {
-        M.animate(el, { opacity: [0, 1], clipPath: ['inset(6% 6% 6% 6% round 22px)', 'inset(0% 0% 0% 0% round 22px)'] }, { duration: 1.1, delay: d, ease: EASE });
-        var img = el.querySelector('img'); if (img) M.animate(img, { transform: ['scale(1.08)', 'scale(1)'] }, { duration: 1.4, delay: d, ease: EASE });
-      } else {
-        M.animate(el, { opacity: [0, 1], transform: ['translateY(28px)', 'translateY(0px)'] }, { duration: .9, delay: d, ease: EASE });
-      }
-    } catch (e) { el.style.opacity = '1'; el.style.transform = 'none'; el.style.clipPath = 'none'; }
-    el.classList.add('in');
-  }
   function watch(scope) {
     $$('[data-reveal]', scope).forEach(function (el) {
       if (el.dataset.watched) return; el.dataset.watched = '1';
       if (reduce) { el.classList.add('in'); return; }
-      if (M) { try { var stop = M.inView(el, function () { motionReveal(el); if (stop) stop(); }, { margin: '0px 0px -8% 0px' }); return; } catch (e) {} }
+      // CSS transitions only: smooth and identical on every device (see .js [data-reveal] in style.css)
       revIO.observe(el);
     });
   }
