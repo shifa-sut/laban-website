@@ -208,21 +208,16 @@
   /* =================================================================
      Outlets
      ================================================================= */
-  var OUT = D.OUTLETS || [], outList = $('#outletList');
-  function renderOutlets(q) {
-    q = (q || '').trim().toLowerCase();
-    var list = OUT.filter(function (o) { return !q || (o.city + ' ' + o.state + ' ' + o.address + ' ' + o.name).toLowerCase().indexOf(q) > -1; });
-    var html = list.map(function (o) { return '<article class="city"><figure class="ph"><img src="' + IMG + 'outlets/outlet-mall-counter.jpg" alt="The Laban Spot counter" width="1280" height="732" loading="lazy"></figure><div class="city__body"><h3>' + esc(o.city) + '</h3><p>' + esc(o.address) + '</p><p>' + esc(o.phone) + '</p><a class="btn btn--sm" href="' + o.maps + '" target="_blank" rel="noopener">Get directions</a></div></article>'; }).join('');
-    if (!list.length) html += '<article class="city city--next"><div class="city__body"><h3>No outlet in “' + esc(q) + '” yet</h3><p>Want one there? You could be the one to open it.</p><a class="btn btn--sm" href="#franchise">Franchise enquiry</a></div></article>';
-    html += '<article class="city city--next"><div class="city__body"><h3>Your city next?</h3><p>More outlets are on the way. Bring The Laban Spot to your neighbourhood.</p><a class="btn btn--sm btn--ghost" href="#franchise">Own a Laban Spot</a></div></article>';
-    outList.innerHTML = html;
-  }
-  renderOutlets('');
-  $('#outletQuery').addEventListener('input', function (e) { renderOutlets(e.target.value); });
+  // Outlets are written straight into index.html (Kerala, Tamil Nadu, Karnataka).
 
   /* =================================================================
      Forms → WhatsApp
      ================================================================= */
+  // open WhatsApp in a new tab; if the browser blocks the new tab, go there in this tab instead
+  function openWa(url) {
+    var w = null; try { w = window.open(url, '_blank'); } catch (e) {}
+    if (w) { try { w.opener = null; } catch (e) {} } else location.href = url;
+  }
   function validate(form) {
     var ok = true;
     $$('[required]', form).forEach(function (inp) {
@@ -240,6 +235,7 @@
     var d = Object.fromEntries(new FormData(fForm));
     $('#waSend').href = waLink("Hi The Laban Spot! I'd like to enquire about a franchise.\n\nName: " + d.name + '\nPhone: ' + d.phone + '\nCity: ' + d.city + '\nPreferred outlet: ' + d.model + (d.message ? '\nMessage: ' + d.message : ''));
     $('#formWrap').hidden = true; $('#formDone').hidden = false; $('#waSend').focus();
+    openWa($('#waSend').href);          // straight to WhatsApp with the details filled in; the button stays as a backup
   });
   $('#formBack').addEventListener('click', function () { $('#formWrap').hidden = false; $('#formDone').hidden = true; });
   var cForm = $('#contactForm');
@@ -247,7 +243,7 @@
     e.preventDefault(); if (!validate(cForm)) return;
     var d = Object.fromEntries(new FormData(cForm)), a = $('#contactWa');
     a.href = waLink('Hi The Laban Spot! This is ' + d.name + '.\n\n' + d.message); a.hidden = false; a.focus();
-    try { window.open(a.href, '_blank', 'noopener'); } catch (err) {}
+    openWa(a.href);
   });
   $$('.copy').forEach(function (b) {
     b.addEventListener('click', function () {

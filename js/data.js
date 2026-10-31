@@ -97,8 +97,10 @@ window.LABAN = {
      { name: 'Guest name', text: 'What they said', source: 'Google', rating: 5 } */
   REVIEWS: [],
 
+  /* Outlets are shown by state in index.html (Kerala, Tamil Nadu, Karnataka). */
   OUTLETS: [
-    { name: 'The Laban Spot', city: 'Calicut', state: 'Kerala', address: 'Hilite Business Park, Calicut, Kerala',
-      phone: '+91 79940 59711', maps: 'https://www.google.com/maps/search/?api=1&query=The+Laban+Spot+Hilite+Business+Park+Calicut' }
+    { state: 'Kerala', note: 'Hilite Business Park, Calicut' },
+    { state: 'Tamil Nadu' },
+    { state: 'Karnataka' }
   ]
 };
