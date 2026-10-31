@@ -59,7 +59,11 @@
     var tip = null;
     strokes.forEach(function (st) {
       var local = Math.max(0, Math.min(1, (shown - st.a) / Math.max(1e-6, st.b - st.a)));
-      st.el.style.strokeDashoffset = (1 - local).toFixed(5);
+      // real lengths (not pathLength) so Safari draws it exactly; strokes not reached yet stay hidden,
+      // otherwise their round line-ends show up as stray dots
+      st.el.style.strokeDasharray = st.len.toFixed(2) + ' ' + (st.len + 2).toFixed(2);
+      st.el.style.strokeDashoffset = (st.len * (1 - local)).toFixed(2);
+      st.el.style.visibility = local > 0 ? 'visible' : 'hidden';
       if (local > 0 && local < 1) tip = st.el.getPointAtLength(local * st.len);
     });
     if (tip) { nib.setAttribute('cx', tip.x.toFixed(1)); nib.setAttribute('cy', tip.y.toFixed(1)); ld.classList.add('is-writing'); }
