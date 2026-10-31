@@ -76,7 +76,7 @@ p{margin:0}
 .js [data-reveal="zoom"].in{clip-path:inset(0 0 0 0 round var(--r-lg))}
 .js [data-reveal="zoom"].in img{transform:none}
 
-.motion [data-reveal],.motion [data-reveal] img,.motion .sheet__img img{transition:none!important}
+.motion .sheet__img img{transition:none!important}
 .motion .sheet__panel,.motion .sheet__scrim{animation:none}
 .motion .tile:hover .tile__img img{transform:none}
 
@@ -465,8 +465,7 @@ p{margin:0}
 .new__stage{--sh:100vh;--px:68%;--py:56%;position:sticky;top:0;height:100vh;height:100svh;height:100dvh;overflow:hidden;background:var(--nw-bg)}
 @supports (height:100svh){.new__stage{--sh:100svh}}
 @supports (height:100dvh){.new__stage{--sh:100dvh}}
-/* pinned screens use the dynamic viewport height (100dvh): when the phone's address bar slides away
-   while scrolling, the pinned screen grows with it, so no strip of the next section shows underneath */
+
 .new__panel{position:absolute;top:0;bottom:0;left:58%;right:0;background:var(--nw-panel);border-radius:56px 0 0 56px;overflow:hidden}
 .new__ring{position:absolute;left:var(--px);top:var(--py);width:min(104vh,66vw);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);
   background:radial-gradient(circle,transparent 0 47%,var(--nw-ring) 47.4% 47.8%,transparent 48.2% 61%,var(--nw-ring) 61.3% 61.7%,transparent 62%),var(--nw-ring);
@@ -778,4 +777,20 @@ p{margin:0}
   .entrance__inside{display:none}
   .js [data-reveal],.js [data-reveal="zoom"],.js .entrance__copy>*{opacity:1;transform:none;clip-path:none}
   .js [data-reveal="zoom"] img{transform:none}
+}
+
+/* ---------------- PHONES: pinned screens never show a gap ----------------
+   Mobile browsers hide the address bar while you scroll, which makes the screen taller.
+   Pinned screens are therefore sized to the TALL viewport (100lvh) so the next section can
+   never peek in underneath; anything pinned to the bottom is lifted by the address-bar height
+   (--bar) so it is still fully visible while the bar is showing. On desktop --bar is 0. */
+@supports (height:100lvh){
+  :root{--bar:calc(100lvh - 100svh)}
+  .entrance__sticky,.gallery.is-pinned .gallery__sticky,.new__stage{height:100lvh}
+  .new__stage{--sh:100svh}
+  .new__wrap{max-height:100svh}
+  .entrance__copy{bottom:var(--bar)}
+  .entrance__inside{bottom:var(--bar)}
+  .scroll-cue{bottom:calc(26px + var(--bar) + env(safe-area-inset-bottom,0px))}
+  .entrance__bar{bottom:calc(14px + var(--bar) + env(safe-area-inset-bottom,0px))}
 }
