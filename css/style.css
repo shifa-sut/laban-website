@@ -101,7 +101,7 @@ p{margin:0}
    How far the pen has got follows the real page-load progress (js/loader.js). */
 .ld__art{position:relative;width:100%;aspect-ratio:1959/312}
 .ld__art svg{width:100%;height:100%;display:block;overflow:visible}
-.ld__ink{fill:none;stroke:#fff;stroke-width:8.0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1}
+.ld__ink{visibility:hidden;fill:none;stroke:#fff;stroke-width:8.0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1}
 .ld__nib{fill:#fff;opacity:0;filter:drop-shadow(0 0 6px rgba(255,255,255,.9));transition:opacity .3s}
 .ld.is-writing .ld__nib{opacity:1}
 .ld.is-flowing .ld__nib{opacity:0}
@@ -896,3 +896,26 @@ p{margin:0}
 .outlets__head h2{color:#fff;font-size:clamp(2.2rem,1.2rem + 3.6vw,4.2rem);font-weight:300}
 .outlets__head h2 em{color:#8FD7F7}
 .outlets__head .eyebrow{color:#BFE6FB}
+
+/* ---------------- Why The Laban Spot: navy with frosted glass cards ---------------- */
+.why{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(45% 60% at 100% 10%,rgba(0,114,174,.45),rgba(0,114,174,0) 70%),radial-gradient(40% 50% at 0% 0%,rgba(0,162,228,.22),rgba(0,162,228,0) 70%),radial-gradient(50% 60% at 90% 100%,rgba(0,114,174,.3),rgba(0,114,174,0) 70%),#071F3D}
+.why h2 em{font-style:normal;color:#8FD7F7}
+.why__swash{display:block;width:150px;height:4px;border-radius:4px;background:#8FD7F7;margin-top:14px;opacity:.9}
+.why .why__stats{border:0;gap:clamp(10px,1.6vw,20px)}
+.why .why__stat,.why .why__stat+.why__stat{border:1px solid rgba(143,215,247,.28);padding:clamp(18px,2vw,26px) 12px;border-radius:24px;text-align:center;display:grid;justify-items:center;gap:6px;
+  background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 24px 40px -24px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);transition:transform .4s var(--ease),box-shadow .4s}
+.why .why__stat:hover{transform:translateY(-4px);box-shadow:0 30px 50px -24px rgba(0,0,0,.65),0 0 0 1px rgba(143,215,247,.45)}
+.why .why__stat--hi{background:linear-gradient(160deg,rgba(0,162,228,.32),rgba(255,255,255,.05));box-shadow:0 24px 44px -20px rgba(0,162,228,.45),inset 0 1px 0 rgba(255,255,255,.18)}
+.why__ic{width:clamp(46px,4.4vw,60px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#8FD7F7;color:#0B2238;flex:none;box-shadow:0 8px 20px -8px rgba(143,215,247,.7)}
+.why__ic svg{width:52%;height:52%}
+.why .why__stat b{color:#fff;margin-top:6px}
+.why .why__stat>span{margin-top:0;opacity:.85}
+.why .why__points li{border:1px solid rgba(143,215,247,.25);border-radius:24px;padding:clamp(16px,2vw,24px);display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;
+  background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 24px 40px -26px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1);transition:transform .4s var(--ease)}
+.why .why__points li:hover{transform:translateY(-4px)}
+.why .why__points h3{font-size:clamp(1.15rem,1rem + .5vw,1.4rem);margin-bottom:4px}
+.why .why__points p{opacity:.8;font-size:.95rem;line-height:1.5}
+@media (max-width:599px){.why .why__stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.why .why__stat{padding:16px 6px;border-radius:18px}.why .why__stat>span{font-size:.78rem}.why__ic{width:40px}}
+.why__ic img{width:54%;height:54%;object-fit:contain;display:block;margin:auto}
+.why .why__stat>.why__ic,.why .why__points .why__ic{display:grid;place-items:center;opacity:1;margin:0;padding:0;line-height:0}
+
