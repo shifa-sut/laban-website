@@ -1,9 +1,9 @@
 /* =====================================================================
    The Laban Spot — loading screen
-   One continuous white line draws a takeaway cup on Laban Spot blue. How
-   much of the line is drawn follows the page's real loading progress
-   (images, the hero video and the window load event); when the cup is
-   complete a soft glint flows along the line, then the homepage opens.
+   "the laban spot" is handwritten by one moving pen, stroke by stroke from
+   left to right, in white on Laban Spot blue. How much of the line is drawn follows the page's real loading progress
+   (images, the hero video and the window load event); when the lettering is
+   complete it glows softly, then the homepage opens.
    When everything is ready the screen fades into the homepage and the
    panda shows up as the floating WhatsApp assistant (js/assistant.js).
    Shown once per browser session.
@@ -13,7 +13,7 @@
   var root = document.documentElement, el = document.getElementById('loader');
   if (!el || el.hidden) { root.classList.remove('is-loading', 'pal-wait'); root.classList.add('is-ready'); return; }
 
-  var bar = document.getElementById('ldBar'), line = document.getElementById('ldLine'), pct = document.getElementById('ldPct'), ld = el.querySelector('.ld');
+  var bar = document.getElementById('ldBar'), strokes = [].map.call(document.querySelectorAll('#ldInk path'), function (p) { return { el: p, a: +p.dataset.a, b: +p.dataset.b, len: p.getTotalLength() }; }), nib = document.getElementById('ldNib'), pct = document.getElementById('ldPct'), ld = el.querySelector('.ld');
 
   var finished = false;
   function done() {
@@ -41,7 +41,7 @@
     return Math.min(1, p);
   }
 
-  var MIN_TIME = 2.8, MAX_TIME = 9;     // long enough to watch the cup being drawn, never longer than needed
+  var MIN_TIME = 3.4, MAX_TIME = 9;     // long enough to watch the line being written, never longer than needed
   var shown = 0, t0 = null, last = 0, fullAt = null;
   function frame(now) {
     if (finished) return;
@@ -55,12 +55,19 @@
     target = Math.min(target, Math.max(cap, .02));
     shown += (target - shown) * Math.min(1, dt * 2.6);
     if (target >= 1 && shown > .995) shown = 1;
-    line.style.strokeDashoffset = (1 - shown).toFixed(4);
+    // each stroke of the lettering is drawn in turn, so the pen moves continuously from left to right
+    var tip = null;
+    strokes.forEach(function (st) {
+      var local = Math.max(0, Math.min(1, (shown - st.a) / Math.max(1e-6, st.b - st.a)));
+      st.el.style.strokeDashoffset = (1 - local).toFixed(5);
+      if (local > 0 && local < 1) tip = st.el.getPointAtLength(local * st.len);
+    });
+    if (tip) { nib.setAttribute('cx', tip.x.toFixed(1)); nib.setAttribute('cy', tip.y.toFixed(1)); ld.classList.add('is-writing'); }
     pct.textContent = Math.round(shown * 100);
     bar.setAttribute('aria-valuenow', Math.round(shown * 100));
 
     if (shown >= 1 && fullAt === null) { fullAt = t; ld.classList.add('is-flowing'); }
-    if (fullAt !== null && t - fullAt > 1.3) { done(); return; }   // let the finished cup shine for a moment
+    if (fullAt !== null && t - fullAt > 1.3) { done(); return; }   // let the finished lettering shine for a moment
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

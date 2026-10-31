@@ -92,14 +92,21 @@ p{margin:0}
 .loader{position:fixed;inset:0;z-index:200;overflow:hidden;color:#fff;display:grid;place-items:center;background:#00A2E4;
   transition:opacity .7s ease,visibility 0s linear .7s}
 .loader.is-done{opacity:0;visibility:hidden}
-.ld{width:min(440px,84vw);display:grid;justify-items:center;gap:clamp(6px,1.4vh,12px);transition:transform .7s var(--ease)}
+.ld{width:min(760px,90vw);display:grid;justify-items:center;gap:clamp(6px,1.4vh,12px);transition:transform .7s var(--ease)}
 .loader.is-done .ld{transform:translateY(-8px)}
-.ld__art{width:100%;height:auto;overflow:visible}
-.ld__line,.ld__glint{fill:none;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.ld__line{stroke:#fff;stroke-width:2.2;stroke-dasharray:1 1;stroke-dashoffset:1}
-.ld__glint{stroke:#fff;stroke-width:4.5;stroke-dasharray:.05 .95;stroke-dashoffset:.05;opacity:0;filter:drop-shadow(0 0 4px rgba(255,255,255,.9));transition:opacity .5s ease}
-.ld.is-flowing .ld__glint{opacity:.9;animation:ldGlint 2.2s linear infinite}
-@keyframes ldGlint{from{stroke-dashoffset:.05}to{stroke-dashoffset:-.95}}
+/* the lettering (the supplied line drawing, in white) is revealed along the line from left to right,
+   following the real loading progress (--p, set by js/loader.js), with a soft pen-tip glow at the front */
+/* "the laban spot" is written by one moving pen: a single white line (traced from the supplied
+   lettering) draws itself stroke by stroke from left to right, with a glowing nib at the tip.
+   How far the pen has got follows the real page-load progress (js/loader.js). */
+.ld__art{position:relative;width:100%;aspect-ratio:1959/312}
+.ld__art svg{width:100%;height:100%;display:block;overflow:visible}
+.ld__ink{fill:none;stroke:#fff;stroke-width:8.0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1}
+.ld__nib{fill:#fff;opacity:0;filter:drop-shadow(0 0 6px rgba(255,255,255,.9));transition:opacity .3s}
+.ld.is-writing .ld__nib{opacity:1}
+.ld.is-flowing .ld__nib{opacity:0}
+.ld.is-flowing .ld__art svg{animation:ldShine 1.2s ease-in-out 1}
+@keyframes ldShine{50%{filter:drop-shadow(0 0 8px rgba(255,255,255,.75))}}
 .ld__msg{margin:0;font-family:var(--f-display);font-variation-settings:"SOFT" 100;font-style:italic;font-weight:400;font-size:clamp(1.3rem,1rem + 1.4vw,2rem);letter-spacing:.005em;text-align:center;opacity:0;transform:translateY(6px);animation:ldIn .8s var(--ease) .5s forwards}
 .ld__pct{margin:0;font:500 .82rem/1 var(--f-body);letter-spacing:.2em;color:rgba(255,255,255,.75);opacity:0;animation:ldIn .8s var(--ease) .7s forwards}
 @keyframes ldIn{to{opacity:1;transform:none}}
@@ -192,7 +199,7 @@ p{margin:0}
 }
 /* phones: lift the buttons clear of the floating panda assistant in the corner */
 @media (orientation:portrait) and (max-width:599px){
-  .entrance__copy{padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))}
+  .entrance__copy{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 }
 @media (orientation:portrait) and (max-height:700px){
   .entrance__lede{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -340,8 +347,9 @@ p{margin:0}
   background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.35);
   -webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);box-shadow:0 40px 80px -40px rgba(3,25,55,.65)}
 .feature__stage{height:clamp(220px,36vh,360px);margin-top:clamp(-40px,-4vh,-20px);display:grid;place-items:center;position:relative}
-.feature__stage::after{content:"";position:absolute;left:18%;right:18%;bottom:2%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(3,25,55,.38),rgba(3,25,55,0));z-index:-1}
-.feature__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 26px rgba(3,25,55,.35));transition:opacity .26s ease,transform .5s var(--ease)}
+.feature__stage::after{content:"";position:absolute;left:16%;right:16%;bottom:1%;height:13%;border-radius:50%;background:radial-gradient(closest-side,rgba(3,25,55,.42),rgba(3,25,55,.16) 60%,rgba(3,25,55,0));z-index:0}
+.feature__img{z-index:1}
+.feature__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .26s ease,transform .5s var(--ease)}
 .feature__body{display:grid;gap:12px;transition:opacity .26s ease,transform .4s var(--ease)}
 .feature.is-switching .feature__img{opacity:0;transform:translateY(14px) scale(.94)}
 .feature.is-switching .feature__body{opacity:0;transform:translateY(8px)}
@@ -473,7 +481,9 @@ p{margin:0}
 .new__ring::after{content:"";position:absolute;inset:19%;border-radius:50%;background:var(--nw-ring);opacity:.9}
 .new__products{position:absolute;inset:0;z-index:4;pointer-events:none}
 .new__product{position:absolute;left:var(--px);top:var(--py);margin:0;width:min(38vw,90vh);height:min(58vh,42vw);will-change:transform;transform:translate(-50%,-50%)}
-.new__product img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 34px 38px rgba(20,24,40,.28)) drop-shadow(0 8px 12px rgba(20,24,40,.16))}
+.new__product img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;display:block}
+/* soft contact shadow drawn as its own ellipse (CSS drop-shadow filters get cut off in a hard line on iPhones) */
+.new__product::after{content:"";position:absolute;left:14%;right:14%;bottom:6%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(10,20,40,.34),rgba(10,20,40,.14) 60%,rgba(10,20,40,0));filter:blur(2px)}
 .new__giant,.new__pill{position:absolute;top:50%;transform:rotate(-90deg);overflow:hidden}
 .new__giant{--gh:min(17vh,9vw);width:var(--gl,var(--sh));height:var(--gh);margin-top:calc(var(--gh) / -2);right:calc(var(--gh) / 2 - var(--gl,var(--sh)) / 2 + 6px)}
 .new__giant i{font-style:normal;white-space:nowrap}
@@ -614,20 +624,39 @@ p{margin:0}
 @media (min-width:900px){.franchise__grid{grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start}}
 
 /* ---------------- 11. OUTLETS ---------------- */
-.outlets{background:#fff}
-.outlets__head{display:grid;gap:22px}
-.outlets__search{max-width:360px;width:100%}
-.outlets__grid{margin-top:clamp(28px,4vw,48px);display:grid;gap:16px}
-.city{display:grid;border-radius:var(--r-lg);overflow:hidden;background:var(--milk);box-shadow:0 0 0 1px var(--line)}
-.city .ph{border-radius:0}
-.city__body{display:grid;gap:6px;padding:18px 18px 20px;justify-items:start}
-.city__body h3{font-size:1.6rem}
-.city__body p{color:var(--ink-soft);font-size:.95rem}
-.city__body .btn{margin-top:8px}
-.city--next{background:var(--mist);box-shadow:none;border:1.5px dashed rgba(0,114,174,.4)}
-.city--next .city__body{height:100%;align-content:center;padding:28px}
-@media (min-width:600px){.outlets__grid{grid-template-columns:1fr 1fr}}
-@media (min-width:900px){.outlets__head{grid-template-columns:1fr auto;align-items:end}.outlets__grid{grid-template-columns:1.4fr 1fr}}
+/* Outlets — a dark rounded showcase: a wide photo banner with the heading and buttons,
+   then one card per state with a frosted label over the photo */
+.outlets{background:radial-gradient(60% 40% at 80% 0%,rgba(0,162,228,.22),rgba(0,162,228,0) 70%),var(--ink);color:#fff}
+/* full-width dark section (no white frame around it) */
+.outlets__shell{display:grid;gap:clamp(14px,2.4vw,26px)}
+.obanner{position:relative;border-radius:clamp(16px,2vw,26px);overflow:hidden;min-height:clamp(320px,48vw,520px);display:grid;align-items:end;color:#fff;isolation:isolate}
+.obanner__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 36%;z-index:-2}
+.obanner::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,34,56,.86) 0%,rgba(11,34,56,.55) 45%,rgba(11,34,56,.05) 80%),linear-gradient(0deg,rgba(11,34,56,.55),rgba(11,34,56,0) 50%)}
+.obanner__copy{display:grid;gap:12px;justify-items:start;padding:clamp(22px,4vw,56px);max-width:620px}
+.obanner__copy h2{color:#fff;font-size:clamp(2.2rem,1.2rem + 4vw,4.6rem);font-weight:300;margin:0}
+.obanner__copy h2 em{color:#8FD7F7}
+.obanner__copy p:not(.eyebrow){margin:0;color:rgba(255,255,255,.85);max-width:40ch}
+.obanner__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.outlets__label{margin:clamp(4px,1vw,10px) 0 0;text-align:center;color:#fff;font-family:var(--f-display);font-variation-settings:"SOFT" 100;font-size:clamp(1.3rem,1rem + 1vw,1.8rem)}
+.outlets__cards{display:grid;gap:clamp(12px,1.8vw,22px)}
+.ocard{position:relative;border-radius:clamp(16px,1.8vw,24px);overflow:hidden;aspect-ratio:4/5;background:#163049;isolation:isolate}
+.ocard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;transition:transform 1.2s var(--ease)}
+.ocard:hover img{transform:scale(1.05)}
+.ocard__pill{position:absolute;top:14px;right:14px;padding:.45em 1em;border-radius:999px;border:1px solid rgba(255,255,255,.7);color:#fff;background:rgba(11,34,56,.25);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font:600 .78rem/1 var(--f-body);text-decoration:none;transition:background .3s,color .3s}
+.ocard__pill:hover{background:#fff;color:var(--ink)}
+.ocard__glass{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,2vw,24px);color:#fff;
+  background:linear-gradient(180deg,rgba(11,34,56,0),rgba(11,34,56,.55) 45%,rgba(11,34,56,.78));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 35%);mask-image:linear-gradient(180deg,transparent,#000 35%);padding-top:clamp(40px,5vw,64px)}
+.ocard__glass h3{margin:0;color:#fff;font-size:clamp(1.5rem,1.1rem + 1vw,2rem);font-weight:400}
+.ocard__glass p{margin:4px 0 0;font-size:.88rem;color:rgba(255,255,255,.82)}
+@media (max-width:599px){
+  .obanner{min-height:560px}
+  .obanner__img{object-position:50% 40%}
+  .obanner::before{background:linear-gradient(0deg,rgba(11,34,56,.92) 0%,rgba(11,34,56,.6) 55%,rgba(11,34,56,.1) 100%)}
+  .ocard{aspect-ratio:16/11}
+}
+@media (min-width:600px){.outlets__cards{grid-template-columns:repeat(3,minmax(0,1fr))}.ocard{aspect-ratio:3/4}}
+@media (min-width:600px) and (max-width:899px){.ocard__pill{top:10px;right:10px;font-size:.7rem}.ocard__glass h3{font-size:1.25rem}.ocard__glass p{font-size:.78rem}}
 
 /* ---------------- 12. CONTACT ---------------- */
 .contact{background:var(--milk)}
@@ -664,23 +693,27 @@ p{margin:0}
 @media (min-width:900px){.lightbox{grid-template-columns:auto 1fr auto;align-items:center;gap:14px}.lightbox__nav{display:block;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;font-size:2rem;line-height:1;cursor:pointer}}
 
 /* floating WhatsApp */
-/* Floating WhatsApp assistant — LaBu the panda (js/assistant.js) */
-.pal{position:fixed;isolation:isolate;right:calc(12px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:48;display:flex;align-items:center;gap:6px;pointer-events:none}
+/* Floating WhatsApp assistant — LaBu the panda (js/assistant.js)
+   The panda is the supplied mascot, mirrored so his LEFT hand (towards the page) waves;
+   the cap and shirt logos were put back the right way round. The greeting bubble stays
+   visible above him on every section; tapping either opens WhatsApp. */
+.pal{position:fixed;isolation:isolate;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:48;display:flex;flex-direction:column;align-items:flex-end;gap:4px;pointer-events:none}
 .pal__btn{position:relative;display:block;width:64px;aspect-ratio:765/1080;pointer-events:auto;border-radius:20px;transition:transform .35s var(--ease);-webkit-tap-highlight-color:transparent}
 .pal__btn:hover,.pal__btn:focus-visible{transform:translateY(-3px) scale(1.04)}
 .pal__btn:focus-visible{outline:3px solid var(--laban);outline-offset:4px}
-.pal__panda{position:absolute;inset:0;filter:drop-shadow(0 8px 10px rgba(11,34,56,.28));animation:palBob 3.6s ease-in-out infinite}
+.pal__panda{position:absolute;inset:0;animation:palBob 3.6s ease-in-out infinite}
+.pal__panda::before{content:"";position:absolute;left:20%;right:16%;bottom:-3%;height:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(11,34,56,.32),rgba(11,34,56,0))}
 .pal__panda img{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-drag:none}
-.pp-leg--l{transform-origin:30.4% 77.1%}.pp-leg--r{transform-origin:57.8% 77.1%}
-.pp-arm{transform-origin:73.5% 57.6%;animation:palWave 2.8s ease-in-out infinite}
-.pal__bubble{order:-1;margin:0 0 34px;position:relative;background:#fff;color:var(--ink);font:600 .86rem/1.3 var(--f-body);padding:.65em .95em;border-radius:16px 16px 4px 16px;box-shadow:0 10px 28px -8px rgba(11,34,56,.35),0 0 0 1px rgba(11,34,56,.06);white-space:nowrap;opacity:0;transform:translateY(8px) scale(.92);transform-origin:100% 100%;transition:opacity .35s ease,transform .45s var(--ease);pointer-events:none}
-.pal__bubble::after{content:"";position:absolute;right:-6px;bottom:8px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px}
+.pp-arm{transform-origin:26.5% 57.6%;animation:palWave 1.7s ease-in-out infinite}
+.pal__bubble{position:relative;margin:0 4px 0 0;background:#fff;color:var(--ink);font:600 .78rem/1.25 var(--f-body);padding:.5em .8em;border-radius:14px 14px 4px 14px;box-shadow:0 8px 22px -8px rgba(11,34,56,.4),0 0 0 1px rgba(11,34,56,.06);white-space:nowrap;pointer-events:auto;cursor:pointer;text-decoration:none;opacity:0;transform:translateY(6px) scale(.94);transform-origin:100% 100%;transition:opacity .4s ease,transform .5s var(--ease)}
+.pal__bubble::after{content:"";position:absolute;right:16px;bottom:-5px;width:10px;height:10px;background:#fff;transform:rotate(45deg);border-radius:2px}
 .pal.is-talking .pal__bubble{opacity:1;transform:none}
 .pal-wait .pal{visibility:hidden}
 @keyframes palBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes palWave{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(11deg)}}
-@keyframes palWaveNow{0%,100%{transform:rotate(0)}15%,55%{transform:rotate(15deg)}35%,75%{transform:rotate(-9deg)}}
-@media (min-width:900px){.pal{right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px))}.pal__btn{width:78px}.pal__bubble{font-size:.92rem;margin-bottom:44px}}
+@keyframes palWave{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-13deg)}}
+@media (min-width:900px){.pal{right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px))}.pal__btn{width:78px}.pal__bubble{font-size:.86rem}}
+/* keep the last lines of the page clear of the assistant */
+.footer{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
 
 /* ---------------- 3. FEATURED DESSERT: Salankatia product reveal ----------------
    Background: the Menu's own background (--menu-bg), drawn at the Menu's size
@@ -703,7 +736,7 @@ p{margin:0}
 .sal__product{position:absolute;inset:0}
 .sal__spin{position:absolute;inset:0;transform-origin:50% 55%}
 .sal__shadow{position:absolute;left:14%;right:14%;bottom:-11%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(2,20,45,.55),rgba(2,20,45,.22) 55%,transparent);filter:blur(4px)}
-.sal__spin>img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 18px 22px rgba(3,24,52,.28))}
+.sal__spin>img{width:100%;height:100%;object-fit:contain;display:block}
 .sal__pin{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.22),0 0 12px rgba(255,255,255,.6);opacity:0;transform:scale(.4);transition:opacity .4s,transform .5s var(--ease)}
 .sal__fall{position:absolute;left:-12%;right:-12%;top:-42%;bottom:0;pointer-events:none;z-index:2}
 .sal__pin{display:none}
@@ -794,3 +827,72 @@ p{margin:0}
   .scroll-cue{bottom:calc(26px + var(--bar) + env(safe-area-inset-bottom,0px))}
   .entrance__bar{bottom:calc(14px + var(--bar) + env(safe-area-inset-bottom,0px))}
 }
+
+/* ---------------- Franchise + Contact: same blue glass look as the Menu ----------------
+   Menu-blue background, frosted glass cards with soft white borders, white text and
+   translucent inputs, so both contact sections feel like part of the menu's theme. */
+.franchise,.contact{position:relative;color:#fff;background:var(--menu-bg)}
+.contact{background:radial-gradient(55% 50% at 20% 25%,rgba(120,205,250,.38) 0%,rgba(120,205,250,0) 70%),radial-gradient(45% 50% at 88% 85%,rgba(198,138,78,.18) 0%,rgba(198,138,78,0) 70%),linear-gradient(200deg,#0A5A92 0%,#0F6FB0 45%,#1C86C8 100%)}
+.franchise h2,.contact h2{color:#fff}
+.contact .eyebrow{color:#BFE6FB}
+.contact .eyebrow::before{background:#BFE6FB}
+.contact .sec-head>p:not(.eyebrow){color:rgba(255,255,255,.85)}
+.franchise .form-card,.contact .form-card{color:#fff;border-radius:36px;
+  background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 30px 60px -30px rgba(3,30,60,.55)}
+.franchise .form-card h3,.contact .form-card h3{color:#fff}
+.franchise .form-card>p,.franchise .form-card>div>p,.contact .form-card>p,.franchise .form__done p{color:rgba(255,255,255,.85)}
+.franchise .field label,.contact .field label{color:#fff}
+.franchise .field .opt{color:rgba(255,255,255,.7)}
+.franchise .field input,.franchise .field select,.franchise .field textarea,
+.contact .field input,.contact .field textarea{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32);color:#fff}
+.franchise .field input::placeholder,.franchise .field textarea::placeholder,.contact .field input::placeholder,.contact .field textarea::placeholder{color:rgba(255,255,255,.62)}
+.franchise .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:2.4em}
+.franchise .field select option{color:var(--ink)}
+.franchise .field input:focus,.franchise .field select:focus,.franchise .field textarea:focus,
+.contact .field input:focus,.contact .field textarea:focus{background:rgba(255,255,255,.22);border-color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.franchise .field .err,.contact .field .err{color:#FFD3CF}
+.franchise .form .btn[type=submit],.contact .form .btn[type=submit],.franchise #waSend{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 16px 30px -14px rgba(3,20,40,.7)}
+.franchise .form .btn[type=submit]:hover,.contact .form .btn[type=submit]:hover,.franchise #waSend:hover{background:#fff;color:var(--ink);border-color:#fff}
+.franchise .btn--ghost,.contact .btn--ghost{color:#fff;border-color:rgba(255,255,255,.7)}
+.franchise .btn--ghost:hover,.contact .btn--ghost:hover{background:#fff;color:var(--ink)}
+.franchise .form__done .tick{background:rgba(255,255,255,.18);color:#fff}
+.perks li{border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+/* contact details as glass cards, like the menu's range cards */
+.contact__list{gap:10px}
+.contact__list li{padding:14px 18px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.contact__list small{color:#BFE6FB}
+.contact__list a{color:#fff}
+.contact__list a:hover{color:#BFE6FB}
+.contact .copy{background:rgba(255,255,255,.2);color:#fff}
+.contact .copy:hover{background:#fff;color:var(--ink)}
+
+/* ---------------- The Laban Experience: "sky" layout ----------------
+   Soft daytime-sky background; the outlet artwork sits on the left and melts into the sky,
+   the heading, text and a white frosted reviews card sit on the right. */
+.experience{position:relative;overflow:hidden;isolation:isolate;
+  background:radial-gradient(40% 30% at 70% 8%,rgba(255,255,255,.8),rgba(255,255,255,0) 70%),radial-gradient(35% 25% at 92% 32%,rgba(255,255,255,.6),rgba(255,255,255,0) 70%),linear-gradient(180deg,#D6E8F7 0%,#E4F0FA 45%,#EDF4FA 75%,#DDE9F3 100%)}
+.exp__art{position:absolute;z-index:-1;left:0;top:50%;transform:translateY(-50%);width:min(56%,1040px);margin:0;
+  -webkit-mask-image:linear-gradient(90deg,#000 62%,transparent 98%),linear-gradient(180deg,transparent 0,#000 10%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,#000 62%,transparent 98%),linear-gradient(180deg,transparent 0,#000 10%,#000 88%,transparent 100%);mask-composite:intersect}
+.exp__art img{width:100%;height:auto;display:block}
+.exp__spacer{display:none}
+.experience h2{font-size:clamp(2.4rem,1.3rem + 3.6vw,4.4rem);line-height:1.02}
+.experience h2 em{font-style:normal;color:var(--ink)}
+.experience .reviews{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);box-shadow:0 30px 60px -34px rgba(11,34,56,.45);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:26px;padding:clamp(20px,2.4vw,30px)}
+@media (min-width:900px){
+  .experience{min-height:min(860px,100svh);display:grid;align-items:center}
+  .experience .exp__grid{grid-template-columns:1fr 1fr}
+  .exp__spacer{display:block}
+  .experience .exp__text{max-width:640px}
+}
+@media (max-width:899px){
+  .experience{padding-top:0}
+  .exp__art{position:relative;top:auto;transform:none;width:auto;margin:0 0 4px;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent);-webkit-mask-composite:source-over;mask-composite:add}
+}
+
+/* Outlets: just the heading over the three state cards */
+.outlets__head{margin:0 auto clamp(6px,1.5vw,16px)}
+.outlets__head h2{color:#fff;font-size:clamp(2.2rem,1.2rem + 3.6vw,4.2rem);font-weight:300}
+.outlets__head h2 em{color:#8FD7F7}
+.outlets__head .eyebrow{color:#BFE6FB}
