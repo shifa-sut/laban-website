@@ -99,7 +99,7 @@ window.LABAN = {
 
   /* Outlets are shown by state in index.html (Kerala, Tamil Nadu, Karnataka). */
   OUTLETS: [
-    { state: 'Kerala', note: 'Hilite Business Park, Calicut' },
+    { state: 'Kerala' },
     { state: 'Tamil Nadu' },
     { state: 'Karnataka' }
   ]
