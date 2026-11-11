@@ -1,18 +1,19 @@
 /* =====================================================================
    The Laban Spot — What's New scroll showcase
-   The section pins to the screen while you scroll through three products.
+   The section pins to the screen while you scroll through each new product.
    Each scroll step swings the current box out to the lower left, swings
    the next one in from the lower right, rolls the product name along the
    coloured panel and blends every colour to the next product's packaging.
    ===================================================================== */
 (function () {
   'use strict';
-  var D = window.LABAN || {}, P = (D.NEW || []).slice(0, 3);
+  var D = window.LABAN || {}, P = (D.NEW || []).slice(0, 6);
   var sec = document.getElementById('new'), track = document.getElementById('newTrack');
   if (!sec || !track || !P.length) return;
   var IMG = 'assets/images/';
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var N = P.length;
+  sec.style.setProperty('--n', N);
   var clamp = function (x, a, b) { return Math.max(a, Math.min(b, x)); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var wa = function (t) { return 'https://wa.me/' + (D.phoneRaw || '917994059711') + '?text=' + encodeURIComponent(t); };

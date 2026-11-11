@@ -76,7 +76,13 @@ window.LABAN = {
       colors: { bg: '#F8F0E4', panel: '#6E3A22', ring: '#E5CFB4', accent: '#7A4024', pill: 'rgba(248,232,208,.92)', pillText: '#5A2C16', stroke: 'rgba(248,232,208,.55)' } },
     { id: 'mohabbat', name: 'Mohabbat', lead: '', accent: 'Mohabbat', ar: '', cut: 'mohabbat-open.webp',
       text: 'Mohabbat means love. A cake set in a gold tray, packed in a pink heart-print box and tied with ribbon.',
-      colors: { bg: '#FDF1F4', panel: '#EE9DB6', ring: '#F7CFDB', accent: '#C2335F', pill: 'rgba(255,255,255,.86)', pillText: '#B02A55', stroke: 'rgba(255,255,255,.62)' } }
+      colors: { bg: '#FDF1F4', panel: '#EE9DB6', ring: '#F7CFDB', accent: '#C2335F', pill: 'rgba(255,255,255,.86)', pillText: '#B02A55', stroke: 'rgba(255,255,255,.62)' } },
+    { id: 'mazaya', name: 'Mazaya', lead: '', accent: 'Mazaya', ar: '', tag: 'Pure decadence', cut: 'mazaya-box.webp',
+      text: 'Soft cream and biscuit crumb layered under a rich topping, packed in a clear box so every layer shows.',
+      colors: { bg: '#FBF5EA', panel: '#7A3E22', ring: '#EBD9BC', accent: '#8A4A26', pill: 'rgba(250,240,222,.92)', pillText: '#6B3419', stroke: 'rgba(250,240,222,.55)' } },
+    { id: 'biscofy', name: 'Lotus Biscofy', lead: 'Lotus', accent: 'Biscofy', ar: '', cut: 'lotus-biscofy-box.webp',
+      text: 'A Lotus biscuit dessert in its own red gift box, made for anyone who loves that caramel biscuit crunch.',
+      colors: { bg: '#FBF0EE', panel: '#B02A30', ring: '#F0CFCB', accent: '#A6232A', pill: 'rgba(255,246,236,.92)', pillText: '#9A1F26', stroke: 'rgba(255,246,236,.55)' } }
   ],
 
 

@@ -25,8 +25,6 @@
     if (window.labanPal) window.labanPal.arrive();
     setTimeout(function () { el.remove(); }, 900);
   }
-  el.querySelector('.loader__skip').addEventListener('click', done);
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') done(); });
 
   /* ---------- real progress ---------- */
   var loaded = document.readyState === 'complete';
